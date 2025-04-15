@@ -79,3 +79,25 @@ export const login = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const getUserInfo = async (req, res) => {
+  try {
+    console.log("User ID from token:", req.userId); // Log the user ID from the token
+    const userData = await User.findById(req.userId);
+    if (!userData) {
+      return res.status(404).send({ error: "User not found" });
+    }
+    return res.status(200).json({
+      id: userData.id,
+      email: userData.email,
+      profileSetup: userData.profileSetup,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      image: userData.image,
+      color: userData.color,
+    });
+  } catch (error) {
+    //   console.error(error);
+    //   return res.status(500).json({ error: error.message });
+  }
+};
