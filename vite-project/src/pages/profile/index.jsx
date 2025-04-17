@@ -17,6 +17,20 @@ import {
 import { apiClient } from "@/lib/api-client";
 
 const Profile = () => {
+  useEffect(() => {
+    // Set the background color of #root when the component is mounted
+    const rootElement = document.body;
+    if (rootElement) {
+      rootElement.style.backgroundColor = "#1b1c24";
+    }
+
+    // Optional: Reset the background color when the component is unmounted
+    return () => {
+      if (rootElement) {
+        rootElement.style.backgroundColor = ""; // Reset to default
+      }
+    };
+  }, []);
   const navigate = useNavigate();
   const { userInfo, setUserInfo } = useAppStore();
   const [firstName, setFirstName] = useState("");
