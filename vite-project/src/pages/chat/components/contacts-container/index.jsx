@@ -47,7 +47,7 @@ const Logo = () => {
           fill="#a16ee8"
         ></path>{" "}
       </svg>
-      <span className="text-3xl font-semibold ">Syncronus</span>
+      <span className="text-3xl font-semibold ">Messtext</span>
     </div>
   );
 };
