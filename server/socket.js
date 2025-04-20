@@ -1,4 +1,5 @@
 import { Server as SocketIOServer } from "socket.io";
+import Message from "./models/MessagesModel.js";
 
 const setupSocket = (server) => {
   const io = new SocketIOServer(server, {
@@ -11,7 +12,7 @@ const setupSocket = (server) => {
   const userSocketMap = new Map();
 
   const disconnect = (socket) => {
-    console.log(`User ${userId} disconnected with socket ID ${socket.id}`);
+    console.log(`User disconnected with socket ID ${socket.id}`);
     for (const [userId, socketId] of userSocketMap.entries()) {
       if (socketId === socket.id) {
         userSocketMap.delete(userId);
@@ -20,6 +21,25 @@ const setupSocket = (server) => {
       }
     }
   };
+  const sendMessage = async (message) => {
+    const senderSocketId = userSocketMap.get(message.sender);
+    console.log(message);
+
+    const receiverSocketId = userSocketMap.get(message.receiver);
+
+    const createdMessage = await Message.create(message);
+    const messageData = await Message.findById(createdMessage._id)
+      .populate("sender", "id email firstName lastName image color")
+      .populate("receiver", "id email firstName lastName image color");
+    console.log("messageData", messageData);
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("receiveMessage", messageData);
+    }
+    if (senderSocketId) {
+      io.to(senderSocketId).emit("receiveMessage", messageData);
+    }
+  };
+
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
     if (userId) {
@@ -28,7 +48,8 @@ const setupSocket = (server) => {
     } else {
       console.log(`User ID not provided on connection`);
     }
-    socket.on("disconnect", () => disconnect);
+    socket.on("sendMessage", (message) => sendMessage(message));
+    socket.on("disconnect", () => disconnect(socket));
   });
 };
 

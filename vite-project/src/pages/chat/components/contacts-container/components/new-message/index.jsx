@@ -26,7 +26,8 @@ import { useAppStore } from "@/store";
 function NewMessage() {
   const [openNewContactMode, setOpenNewContactMode] = useState(false);
   const [searchedContacts, setsearchedContacts] = useState([]);
-  const { setSelectedChatType, setSelectedChatData } = useAppStore();
+  const { selectedChatData, setSelectedChatType, setSelectedChatData } =
+    useAppStore();
 
   const searchContacts = async (e) => {
     try {
@@ -52,6 +53,7 @@ function NewMessage() {
     setSelectedChatType("contact");
 
     setSelectedChatData(contact);
+    console.log(selectedChatData, "selected confirm");
 
     // Add your logic to handle the selected contact here
     console.log("Selected contact:", contact);
@@ -85,7 +87,7 @@ function NewMessage() {
               onChange={(e) => searchContacts(e.target.value)}
             />
           </div>
-          <ScrollArea className={"h-[2500px]"}>
+          <ScrollArea className={"h-[250px]"}>
             <div className="flex flex-col gap-5">
               {searchedContacts.map((contact) => (
                 <div
