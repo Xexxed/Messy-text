@@ -1,6 +1,6 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { useAppStore } from "@/store";
-import { HOST } from "@/utils/constants";
+import { HOST, LOGOUT } from "@/utils/constants";
 import { getColor } from "@/lib/utils";
 import {
   Tooltip,
@@ -11,11 +11,26 @@ import {
 import { FiEdit2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { IoPowerSharp } from "react-icons/io5";
+import { apiClient } from "@/lib/api-client";
 
 const ProfileInfo = () => {
   const navigate = useNavigate();
-  const { userInfo } = useAppStore();
-  const logOut = async () => {};
+  const { userInfo, setUserInfo } = useAppStore();
+  const logOut = async () => {
+    try {
+      const response = await apiClient.post(
+        LOGOUT,
+        {},
+        { withCredentials: true }
+      );
+      if (response.status === 200) {
+        setUserInfo(undefined);
+        navigate("/auth");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="absolute bottom-15 flex items-center justify-between px-10 py-5 w-full bg-[#2a2b33]">
       <div className="flex gap-3 items-center justify-center">

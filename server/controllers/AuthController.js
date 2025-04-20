@@ -177,3 +177,12 @@ export const removeProfileImage = async (req, res) => {
     //   return res.status(500).json({ error: error.message });
   }
 };
+export const logout = async (req, res) => {
+  try {
+    res.cookie("jwt", "", { maxAge: 1, secure: true, sameSite: "none" });
+    return res.status(200).send("Logout succesfully");
+  } catch (error) {
+    console.error(error);
+    //   return res.status(500).json({ error: error.message });
+  }
+};
