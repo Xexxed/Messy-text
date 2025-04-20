@@ -134,7 +134,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
+    <div className="bg-[#1b1c24] h-[95vh] flex items-center justify-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
         <div>
           <IoArrowBack

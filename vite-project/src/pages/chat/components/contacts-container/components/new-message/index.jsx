@@ -21,10 +21,13 @@ import { GET_CONTACTS, HOST } from "@/utils/constants";
 import { apiClient } from "@/lib/api-client";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
+import { useAppStore } from "@/store";
 
 function NewMessage() {
   const [openNewContactMode, setOpenNewContactMode] = useState(false);
   const [searchedContacts, setsearchedContacts] = useState([]);
+  const { setSelectedChatType, setSelectedChatData } = useAppStore();
+
   const searchContacts = async (e) => {
     try {
       if (e.length > 0) {
@@ -43,6 +46,17 @@ function NewMessage() {
       console.error("Error searching contacts:", error);
     }
   };
+  const selectNewContact = (contact) => {
+    setOpenNewContactMode(false);
+    setsearchedContacts([]);
+    setSelectedChatType("contact");
+
+    setSelectedChatData(contact);
+
+    // Add your logic to handle the selected contact here
+    console.log("Selected contact:", contact);
+  };
+
   return (
     <>
       <TooltipProvider>
@@ -77,6 +91,7 @@ function NewMessage() {
                 <div
                   key={contact.id}
                   className="flex gap-3 items-center cursor-pointer"
+                  onClick={() => selectNewContact(contact)}
                 >
                   <div className=" w-12 h-12 relative">
                     <Avatar className="h-12 w-12 rounded-full overflow-hidden flex items-center justify-center">
@@ -103,7 +118,7 @@ function NewMessage() {
                     <span>
                       {contact.firstName && contact.lastName
                         ? `${contact.firstName} ${contact.lastName}`
-                        : ""}
+                        : contact.email}
                     </span>
                     <span className="text-xs">{contact.email}</span>
                   </div>

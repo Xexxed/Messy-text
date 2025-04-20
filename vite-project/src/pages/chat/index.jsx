@@ -7,7 +7,7 @@ import EmptyChatContainer from "./components/empty-chat-container";
 import ChatContainer from "./components/chat-container";
 
 const Chat = () => {
-  const { userInfo } = useAppStore();
+  const { userInfo, selectedChatType } = useAppStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -19,8 +19,13 @@ const Chat = () => {
     }
   }, [userInfo, navigate]);
   return (
-    <div className="flex h-[100vh] text-white outline-hidden">
+    <div className="flex h-[95vh] text-white outline-hidden">
       <ContactsContainer />
+      {selectedChatType === undefined ? (
+        <EmptyChatContainer />
+      ) : (
+        <ChatContainer />
+      )}
       {/* <EmptyChatContainer /> */}
       {/* <ChatContainer /> */}
     </div>
