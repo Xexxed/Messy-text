@@ -5,6 +5,8 @@ import { useEffect, useRef } from "react";
 import { useState } from "react";
 
 const MessageContainer = () => {
+  const [selectedMessageId, setSelectedMessageId] = useState(null); // Track the selected message ID
+
   const scrollRef = useRef(null);
   const { selectedChatData, selectedChatType, selectedChatMessages } =
     useAppStore();
@@ -13,7 +15,11 @@ const MessageContainer = () => {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [selectedChatMessages]);
-  console.log({ selectedChatMessages });
+  //console.log({ selectedChatMessages });
+  const handleToggleTimestamp = (messageId) => {
+    //Toggling the messageID
+    setSelectedMessageId((prevId) => (prevId === messageId ? null : messageId));
+  };
   const renderMessages = () => {
     let lastDate = null;
     return selectedChatMessages.map((message) => {
@@ -46,13 +52,17 @@ const MessageContainer = () => {
                 ? " bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50 rounded-full"
                 : "bg-[#2a2b33]/5 text-white/80 ☐ border-[#ffffff]/20 rounded-full"
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+            onClick={() => handleToggleTimestamp(message._id)}
+            style={{ cursor: "pointer" }}
           >
             {message.content}
           </div>
         )}
-        <div className="text-xs text-gray-600">
-          {moment(message.timestamp).format("LT")}
-        </div>
+        {selectedMessageId === message._id && ( // Show timestamp only for the selected message
+          <div className="text-xs text-gray-600">
+            {moment(message.timestamp).format("LT")}
+          </div>
+        )}
       </div>
     );
   };
