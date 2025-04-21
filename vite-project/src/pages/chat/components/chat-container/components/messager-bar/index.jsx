@@ -6,6 +6,8 @@ import { IoSend } from "react-icons/io5";
 import { useAppStore } from "@/store";
 import { RiEmojiStickerLine } from "react-icons/ri";
 import { useSocket } from "@/context/SocketContext";
+
+import { RiRobotFill } from "react-icons/ri";
 const MessageBar = () => {
   const emojiRef = useRef(null);
   const [message, setMessage] = useState("");
@@ -47,12 +49,12 @@ const MessageBar = () => {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
-        <button className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 translate-all">
+        <button className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 translate-all cursor-pointer">
           <GrAttachment className="text-2xl" />
         </button>
         <div className="relative">
           <button
-            className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 translate-all"
+            className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 translate-all cursor-pointer"
             onClick={() => setShowEmoji((prev) => !prev)}
           >
             <RiEmojiStickerLine className="text-2xl" />
@@ -66,6 +68,9 @@ const MessageBar = () => {
             />
           </div>
         </div>
+        <button className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 translate-all">
+          <RiRobotFill className="text-2xl mb-1 " />
+        </button>
       </div>
       <button
         className="bg-[#8417ff] rounded-md flex items-center justify-center p-5 focus:border-none hover:bg-[#741bda] focus:bg-[#741bda]  focus:outline-none focus:text-white duration-300 translate-all"

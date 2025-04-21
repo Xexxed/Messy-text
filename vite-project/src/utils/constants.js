@@ -9,3 +9,6 @@ export const ADD_PROFILE_IMAGE = `${AUTH_ROUTES}/add-profile-image`;
 export const REMOVE_PROFILE_IMAGE = `${AUTH_ROUTES}/remove-profile-image`;
 export const LOGOUT = `${AUTH_ROUTES}/logout`;
 export const GET_CONTACTS = `${CONTACTS_ROUTES}/search`;
+export const GET_DM_CONTACTS_ROUTES = `${CONTACTS_ROUTES}/get-contacts-dm`;
+export const MESSAGES_ROUTES = "api/messages";
+export const GET_ALL_MESSAGES = `${MESSAGES_ROUTES}/get-messages`;

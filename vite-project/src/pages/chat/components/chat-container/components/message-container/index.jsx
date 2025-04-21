@@ -1,15 +1,43 @@
 //import React from "react";
+import { apiClient } from "@/lib/api-client";
 import { useAppStore } from "@/store";
+import { GET_ALL_MESSAGES } from "@/utils/constants";
 import moment from "moment";
-import { useEffect, useRef } from "react";
+import { use, useEffect, useRef } from "react";
 import { useState } from "react";
 
 const MessageContainer = () => {
   const [selectedMessageId, setSelectedMessageId] = useState(null); // Track the selected message ID
 
   const scrollRef = useRef(null);
-  const { selectedChatData, selectedChatType, selectedChatMessages } =
-    useAppStore();
+  const {
+    selectedChatData,
+    selectedChatType,
+    selectedChatMessages,
+    setSelectedChatMessages,
+  } = useAppStore();
+  useEffect(() => {
+    const getMessages = async () => {
+      try {
+        const response = await apiClient.post(
+          GET_ALL_MESSAGES,
+          { id: selectedChatData.id },
+          { withCredentials: true }
+        );
+        if (response.data.messages) {
+          setSelectedChatMessages(response.data.messages);
+        }
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+    //console.log(selectedChatData, selectedChatType, "selected chat data");
+    if (selectedChatData.id) {
+      if (selectedChatType === "contact") {
+        getMessages();
+      }
+    }
+  }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollIntoView({ behavior: "smooth" });
@@ -49,8 +77,8 @@ const MessageContainer = () => {
           <div
             className={`${
               message.sender !== selectedChatData.id
-                ? " bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50 rounded-full"
-                : "bg-[#2a2b33]/5 text-white/80 ☐ border-[#ffffff]/20 rounded-full"
+                ? " bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50 rounded-md"
+                : "bg-[#2a2b33]/5 text-white/80 ☐ border-[#ffffff]/20 rounded-md"
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
             onClick={() => handleToggleTimestamp(message._id)}
             style={{ cursor: "pointer" }}
@@ -68,7 +96,7 @@ const MessageContainer = () => {
   };
 
   return (
-    <div className="flex-1 overflow-y-auto scrollbar-hidden p-4  md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
+    <div className="flex-1 overflow-y-auto scrollbar-hidden p-4  md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full scrollbar-custom">
       {renderMessages()}
       <div ref={scrollRef} />
     </div>

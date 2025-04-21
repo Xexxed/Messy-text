@@ -50,3 +50,21 @@ body {
   padding: 0;
   overflow: hidden; /* Prevent scrollbars */
 }
+@layer utilities {
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 15px; /* Width of the scrollbar */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: #2a2b33; /* Background color of the scrollbar track */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: #b27cf0; /* Color of the scrollbar thumb */
+    border-radius: 4px; /* Rounded corners for the scrollbar thumb */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: #5b2f8d; /* Color of the scrollbar thumb on hover */
+  }
+}
