@@ -1,10 +1,12 @@
 import { Mongoose } from "mongoose";
 import User from "../models/UserModel.js";
 import Message from "../models/MessagesModel.js";
+import mongoose from "mongoose";
 
 export const searchContacts = async (req, res) => {
   try {
     const { e } = req.body;
+
     const searchTerm = e; // Log the search term for debugging
     if (!searchTerm) {
       return res.status(400).send({ error: "Search term is required" });
@@ -45,12 +47,13 @@ export const searchContacts = async (req, res) => {
 
 export const getContactsForDMList = async (req, res) => {
   try {
-    console.log("Request received for /get-contacts-dm");
-    let { userId } = req;
+    console.log("DM req", req.userId);
+    let userId = new mongoose.Types.ObjectId(req.userId); // Convert userId to ObjectId
+
     const contacts = await Message.aggregate([
       {
         $match: {
-          $or: [{ sender: userId }, { receiver: userId }],
+          $or: [{ sender: userId }, { receiver: userId }], // Match sender or receiver
         },
       },
       {
@@ -93,9 +96,11 @@ export const getContactsForDMList = async (req, res) => {
       },
     ]);
 
+    console.log("Contacts:", contacts);
+
     return res.status(200).json({ contacts });
   } catch (error) {
-    //console.error(error);
+    console.error("Error in getContactsForDMList:", error);
     return res.status(500).json({ error: error.message });
   }
 };
