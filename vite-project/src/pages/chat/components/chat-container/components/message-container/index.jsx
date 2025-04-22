@@ -21,7 +21,7 @@ const MessageContainer = () => {
       try {
         const response = await apiClient.post(
           GET_ALL_MESSAGES,
-          { id: selectedChatData.id },
+          { id: selectedChatData.id || selectedChatData._id },
           { withCredentials: true }
         );
         if (response.data.messages) {
@@ -32,7 +32,7 @@ const MessageContainer = () => {
       }
     };
     //console.log(selectedChatData, selectedChatType, "selected chat data");
-    if (selectedChatData.id) {
+    if (selectedChatData.id || selectedChatData._id) {
       if (selectedChatType === "contact") {
         getMessages();
       }
@@ -70,13 +70,15 @@ const MessageContainer = () => {
     return (
       <div
         className={`${
-          message.sender === selectedChatData.id ? "text-left" : "text-right"
+          message.sender === (selectedChatData.id || selectedChatData._id)
+            ? "text-left"
+            : "text-right"
         }`}
       >
         {message.messageType === "text" && (
           <div
             className={`${
-              message.sender !== selectedChatData.id
+              message.sender !== (selectedChatData.id || selectedChatData._id)
                 ? " bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50 rounded-md"
                 : "bg-[#2a2b33]/5 text-white/80 ☐ border-[#ffffff]/20 rounded-md"
             } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}

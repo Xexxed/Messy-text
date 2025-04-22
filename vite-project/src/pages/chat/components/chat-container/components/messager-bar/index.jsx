@@ -33,7 +33,7 @@ const MessageBar = () => {
       socket.emit("sendMessage", {
         sender: userInfo.id,
         content: message,
-        receiver: selectedChatData.id,
+        receiver: selectedChatData.id || selectedChatData._id,
         messageType: "text",
         fileUrl: undefined,
       });

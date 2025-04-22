@@ -53,10 +53,9 @@ function NewMessage() {
     setSelectedChatType("contact");
 
     setSelectedChatData(contact);
-    console.log(selectedChatData, "selected confirm");
+    //console.log(selectedChatData, "selected confirm");
 
-    // Add your logic to handle the selected contact here
-    console.log("Selected contact:", contact);
+    // console.log("Selected contact:", contact);
   };
 
   return (
