@@ -32,6 +32,10 @@ const messageSchema = new Mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  isAi: {
+    type: Boolean,
+    default: false, // Default to false if not provided
+  },
   timestamp: {
     type: Date,
     default: Date.now,
