@@ -1,6 +1,7 @@
 import Message from "../models/MessagesModel.js";
 import Groq from "groq-sdk";
 import dotenv from "dotenv";
+import { mkdirSync, renameSync } from "fs";
 dotenv.config();
 export const getMessages = async (req, res) => {
   try {
@@ -84,5 +85,24 @@ export const getAISuggestions = async (req, res) => {
   } catch (error) {
     console.error("Error fetching AI suggestions from Groq:", error);
     return res.status(500).json({ error: "Failed to fetch AI suggestions" });
+  }
+};
+
+export const uploadFile = async (req, res) => {
+  console.log("File upload request:", req.file); // Log the file upload request for debugging
+  try {
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+    const date = new Date().toISOString().split("T")[0]; // Get the current date in YYYY-MM-DD format
+    let fileDir = `uploads/files/${date}`;
+    let fileName = `${fileDir}/${req.file.originalname}`;
+    mkdirSync(fileDir, { recursive: true });
+    renameSync(req.file.path, fileName);
+
+    return res.status(200).json({ filePath: fileName });
+  } catch (error) {
+    console.error("Error uploading file:", error);
+    return res.status(500).json({ error: "Failed to upload file" });
   }
 };
