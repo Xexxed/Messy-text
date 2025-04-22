@@ -37,9 +37,13 @@ const MessageBar = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [emojiRef]);
-  useEffect(() => {
-    console.log("selectedChatMessages", selectedChatMessages.slice(-5));
-  }, [selectedChatMessages]);
+  //   useEffect(() => {
+  //     const arr = selectedChatMessages.slice(-10); // Get the last 10 messages
+  //     const lastTenMessages = { messages: arr };
+  //     console.log("lastTenMessages", lastTenMessages);
+
+  //     //console.log("selectedChatMessages", selectedChatMessages.slice(-5));
+  //   }, [selectedChatMessages]);
 
   const handleEmojiClick = (emoji) => {
     setMessage((prev) => prev + emoji.emoji);
@@ -66,8 +70,10 @@ const MessageBar = () => {
         { messages: lastTenMessages },
         { withCredentials: true }
       );
-      if (response.status === 200 && response.data.suggestions) {
-        setAiSuggestions(response.data.suggestions);
+      console.log("response", response.data);
+      if (response.status === 200 && response.data) {
+        setAiSuggestions(response.data);
+        console.log("AI Suggestionsfdsfs:", aiSuggestions);
       }
     } catch (error) {
       console.error("Error fetching AI suggestions:", error);
@@ -116,39 +122,31 @@ const MessageBar = () => {
           </div>
         </div>
         <Popover>
-          <PopoverTrigger className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 translate-all">
+          <PopoverTrigger
+            className="text-neutral-500 focus:border-none focus:outline-none focus:text-white duration-300 translate-all"
+            onClick={fetchAISuggestions}
+          >
             <RiRobotFill className="text-2xl mb-1" />
           </PopoverTrigger>
           <PopoverContent className="bg-[#2a2b33] p-4 rounded-md shadow-lg text-white mb-30 mr-80">
             <div className="flex flex-col gap-2">
               <p className="text-sm">AI Suggestions:</p>
-              <button
-                className="bg-[#8417ff] text-white rounded-md p-2 hover:bg-[#741bda] focus:outline-none"
-                onClick={() => {
-                  setMessage("Hi");
-                  setAi(true);
-                }}
-              >
-                Suggestion 1
-              </button>
-              <button
-                className="bg-[#8417ff] text-white rounded-md p-2 hover:bg-[#741bda] focus:outline-none"
-                onClick={() => {
-                  setMessage("Can you provide more details?");
-                  setAi(true);
-                }}
-              >
-                Suggestion 2
-              </button>
-              <button
-                className="bg-[#8417ff] text-white rounded-md p-2 hover:bg-[#741bda] focus:outline-none"
-                onClick={() => {
-                  setMessage("Let me look into that for you.");
-                  setAi(true);
-                }}
-              >
-                Suggestion 3
-              </button>
+              {loadingSuggestions ? (
+                <p className="text-sm text-gray-400">Loading...</p>
+              ) : (
+                aiSuggestions.map((suggestion, index) => (
+                  <button
+                    key={index}
+                    className="bg-[#8417ff] text-white rounded-md p-2 hover:bg-[#741bda] focus:outline-none"
+                    onClick={() => {
+                      setMessage(suggestion);
+                      setAi(true);
+                    }}
+                  >
+                    {suggestion}
+                  </button>
+                ))
+              )}
             </div>
           </PopoverContent>
         </Popover>

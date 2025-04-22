@@ -80,7 +80,7 @@ export const getAISuggestions = async (req, res) => {
     );
     // Return the suggestions to the client
     console.log("AI Suggestions:", suggestionsArray); // Log the suggestions for debugging
-    return res.status(200).json(suggestionsArray);
+    return res.status(200).send(suggestionsArray);
   } catch (error) {
     console.error("Error fetching AI suggestions from Groq:", error);
     return res.status(500).json({ error: "Failed to fetch AI suggestions" });
