@@ -14,6 +14,7 @@ import {
 
 import { RiRobotFill } from "react-icons/ri";
 import { apiClient } from "@/lib/api-client";
+import { GET_AI_SUGGESTIONS } from "@/utils/constants";
 const MessageBar = () => {
   const emojiRef = useRef(null);
   const [message, setMessage] = useState("");
