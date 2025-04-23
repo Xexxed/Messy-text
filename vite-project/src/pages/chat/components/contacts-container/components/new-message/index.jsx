@@ -53,7 +53,11 @@ function NewMessage() {
     setSelectedChatType("contact");
 
     setSelectedChatData(contact);
-    //console.log(selectedChatData, "selected confirm");
+    console.log(
+      useAppStore.getState().selectedChatData,
+      "useAppStore.getState().selectedChatData"
+    );
+    //console.log("Hellllllllll");
 
     // console.log("Selected contact:", contact);
   };

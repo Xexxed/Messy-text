@@ -23,8 +23,8 @@ const ContactList = ({ contacts, isChannel = false }) => {
       setSelectedChatType("contact");
     }
     setSelectedChatData(contact);
-    console.log(contact, "contact");
-    console.log(selectedChatData, "selectedChatData");
+    //console.log(contact, "contact");
+    // console.log(selectedChatData, "selectedChatData");
     if (selectedChatData && selectedChatData._id !== contact._id) {
       console.log("This is getting invoked");
       setSelectedChatMessages([]);
@@ -58,7 +58,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
                     className={`${
                       selectedChatData &&
                       (selectedChatData.id || selectedChatData._id) ===
-                        contact._id
+                        (contact._id || contact.id)
                         ? "bg-[ffffff22] border-2 border-white/70"
                         : getColor(contact.color)
                     }uppercase h-10 w-10 text-lg border-[1px] flex items-center justify-center rounded-full `}
@@ -79,7 +79,11 @@ const ContactList = ({ contacts, isChannel = false }) => {
             {isChannel ? (
               <span>{contact.name}</span>
             ) : (
-              <span>{`${contact.firstName} ${contact.lastName}`}</span>
+              <span>
+                {contact.firstName
+                  ? `${contact.firstName} ${contact.lastName}`
+                  : contact.email}
+              </span>
             )}
           </div>
         </div>

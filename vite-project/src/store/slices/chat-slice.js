@@ -50,4 +50,33 @@ export const createChatSlice = (set, get) => ({
       ],
     });
   },
+  addChannelInChannelList: (message) => {
+    //console.log("addChannelInChannelList", message);
+    const channels = get().channels;
+    const data = channels.find((channel) => channel._id === message.channelId);
+    const index = channels.findIndex(
+      (channel) => channel._id === message.channelId
+    );
+    if (index !== -1 && index !== undefined) {
+      channels.splice(index, 1);
+      channels.unshift(data);
+    }
+  },
+  addContactsInDirectMessages: (message) => {
+    const userId = get().userInfo.id;
+    const fromId =
+      message.sender._id === userId ? message.receiver._id : message.sender._id;
+    const fromData =
+      message.sender._id === userId ? message.receiver : message.sender;
+    const dMContacts = get().directMessagesContacts;
+    //  const data = dMContacts.find((contact) => contact._id === fromId);
+    const index = dMContacts.findIndex((contact) => contact._id === fromId);
+    if (index !== -1 && index !== undefined) {
+      dMContacts.splice(index, 1);
+      dMContacts.unshift(fromData);
+    } else {
+      dMContacts.unshift(fromData);
+    }
+    set({ directMessagesContacts: dMContacts });
+  },
 });
