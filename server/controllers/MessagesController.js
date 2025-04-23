@@ -2,6 +2,8 @@ import Message from "../models/MessagesModel.js";
 import Groq from "groq-sdk";
 import dotenv from "dotenv";
 import { mkdirSync, renameSync } from "fs";
+import { extractPublicId } from "cloudinary-build-url";
+import cloudinary from "../config/cloudinary.js";
 dotenv.config();
 export const getMessages = async (req, res) => {
   try {
@@ -89,20 +91,43 @@ export const getAISuggestions = async (req, res) => {
 };
 
 export const uploadFile = async (req, res) => {
-  console.log("File upload request:", req.file); // Log the file upload request for debugging
+  //console.log("File upload request:", req.file); // Log the file upload request for debugging
   try {
     if (!req.file) {
       return res.status(400).json({ error: "No file uploaded" });
     }
-    const date = new Date().toISOString().split("T")[0]; // Get the current date in YYYY-MM-DD format
-    let fileDir = `uploads/files/${date}`;
-    let fileName = `${fileDir}/${req.file.originalname}`;
-    mkdirSync(fileDir, { recursive: true });
-    renameSync(req.file.path, fileName);
-
-    return res.status(200).json({ filePath: fileName });
+    // const date = new Date().toISOString().split("T")[0]; // Get the current date in YYYY-MM-DD format
+    // let fileDir = `uploads/files/${date}`;
+    // let fileName = `${fileDir}/${req.file.originalname}`;
+    // mkdirSync(fileDir, { recursive: true });
+    // renameSync(req.file.path, fileName);
+    const fileUrl = req.file.path;
+    const fileName = req.file.originalname;
+    // Get the file URL from the request
+    // console.log("File URL:", req.file); // Log the file URL for debugging
+    return res.status(200).json({ filePath: fileUrl, fileName });
   } catch (error) {
     console.error("Error uploading file:", error);
     return res.status(500).json({ error: "Failed to upload file" });
+  }
+};
+export const getSignedFileUrl = async (req, res) => {
+  try {
+    console.log("File URL from request:", req.fileUrl); // Log the file URL for debugging
+    const { fileUrl } = req.body;
+    if (!fileUrl) {
+      return res.status(400).json({ error: "File URL is required" });
+    }
+    const publicId = extractPublicId(fileUrl);
+    const signedUrl = await cloudinary.url(publicId, {
+      secure: true,
+      sign_url: true,
+      resource_type: "raw",
+    });
+
+    return res.status(200).json({ signedUrl });
+  } catch (error) {
+    console.error("Error extracting public ID:", error);
+    return res.status(500).json({ error: "Failed to extract public ID" });
   }
 };

@@ -5,7 +5,7 @@ import { getColor } from "@/lib/utils";
 import { useEffect } from "react";
 
 const ContactList = ({ contacts, isChannel = false }) => {
-  console.log(contacts, "contacts in contact list");
+  //console.log(contacts, "contacts in contact list");
   const {
     selectedChatData,
     setSelectedChatData,
@@ -49,7 +49,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
               <Avatar className="h-10 w-10 rounded-full overflow-hidden ">
                 {contact.image ? (
                   <AvatarImage
-                    src={`${HOST}/${contact.image}`}
+                    src={contact.image}
                     alt="Profile"
                     className="object-cover w-full h-full bg-black"
                   />

@@ -28,6 +28,12 @@ const messageSchema = new Mongoose.Schema({
       return this.messageType === "file";
     },
   },
+  fileName: {
+    type: String,
+    required: function () {
+      return this.messageType === "file";
+    },
+  },
   isRead: {
     type: Boolean,
     default: false,

@@ -3,10 +3,14 @@ import jwt from "jsonwebtoken";
 import { compare } from "bcrypt";
 import { response } from "express";
 import { renameSync, unlinkSync } from "fs";
+import upload from "../config/multerFile.js";
+import cloudinary from "../config/cloudinary.js";
 
 const maxAge = 3 * 24 * 60 * 60 * 1000; // Example: 3 days in seconds
 const createToken = (email, userId) => {
   return jwt.sign({ email, userId }, process.env.JWT_SECRET, {
+    secure: true,
+    sameSite: "none",
     expiresIn: maxAge,
   });
 };
@@ -22,6 +26,8 @@ export const signup = async (req, res) => {
     const user = await User.create({ email, password });
 
     res.cookie("jwt", createToken(email, user.id), {
+      secure: true,
+      sameSite: "none",
       maxAge: maxAge, // Convert to milliseconds
     });
 
@@ -58,6 +64,8 @@ export const login = async (req, res) => {
     }
 
     res.cookie("jwt", createToken(email, user.id), {
+      secure: true,
+      sameSite: "none",
       maxAge: maxAge,
     });
 
@@ -137,12 +145,14 @@ export const addProfileImage = async (req, res) => {
       return res.status(400).send("File is required");
     }
     const date = Date.now();
-    let fileName = "uploads/profiles/" + date + req.file.originalname;
-    renameSync(req.file.path, fileName);
+    //let fileName = "uploads/profiles/" + date + req.file.originalname;
+    // renameSync(req.file.path, fileName);
+    console.log("Image File path:", req.file);
+    const imageUrl = req.file.path;
     const updatedUser = await User.findOneAndUpdate(
       { _id: req.userId },
       {
-        image: fileName,
+        image: imageUrl,
       },
       { new: true, runValidators: true }
     );
@@ -151,7 +161,8 @@ export const addProfileImage = async (req, res) => {
       image: updatedUser.image,
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error uploading profile image:", error);
+    return res.status(500).json({ error: "Failed to upload profile image" });
     //   return res.status(500).json({ error: error.message });
   }
 };
@@ -163,7 +174,15 @@ export const removeProfileImage = async (req, res) => {
       return res.status(404).send({ error: "User not found" });
     }
     if (user.image) {
-      unlinkSync(user.image);
+      //unlinkSync(user.image);
+      const publicId = user.image.split("/").pop().split(".")[0];
+      const filePath = `uploads/profiles/${publicId}`;
+      await cloudinary.uploader.destroy(filePath, (error, result) => {
+        if (error) {
+          console.error("Error deleting image from Cloudinary:", error);
+          return res.status(500).send("Failed to delete image");
+        }
+      });
     }
     user.image = null;
     await user.save();

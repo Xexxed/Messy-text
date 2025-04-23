@@ -1,4 +1,4 @@
-export const HOST = import.meta.env.VITE_HOST;
+export const HOST = import.meta.env.VITE_HOST || "http://localhost:9001";
 export const AUTH_ROUTES = "api/auth";
 export const CONTACTS_ROUTES = "api/contacts";
 export const SIGNUP = `${AUTH_ROUTES}/signup`;
@@ -19,3 +19,4 @@ export const UPLOAD_FILE_ROUTES = `${MESSAGES_ROUTES}/upload-file`;
 export const CREATE_CHANNEL_ROUTES = `${CHANNEL_ROUTES}/create-channel`;
 export const GET_USER_CHANNELS = `${CHANNEL_ROUTES}/get-user-channels`;
 export const GET_CHANNEL_MESSAGES = `${CHANNEL_ROUTES}/get-channel-messages`;
+export const GET_SIGNED_URL = `${MESSAGES_ROUTES}/get-signed-url`;

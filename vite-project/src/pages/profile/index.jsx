@@ -1,5 +1,5 @@
 import { useAppStore } from "@/store";
-import React, { useEffect, useRef } from "react";
+import React, { use, useEffect, useRef } from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
@@ -40,6 +40,7 @@ const Profile = () => {
   const [selectedColor, setSelectedColor] = useState(0);
   const fileInputRef = useRef(null);
   useEffect(() => {
+    console.log(userInfo);
     if (userInfo.profileSetup) {
       setFirstName(userInfo.firstName);
       setLastName(userInfo.lastName);
@@ -47,7 +48,7 @@ const Profile = () => {
       //setImage(userInfo.image);
     }
     if (userInfo.image) {
-      setImage(`${HOST}/${userInfo.image}`);
+      setImage(userInfo.image);
       console.log(userInfo);
     }
   }, [userInfo]);
@@ -107,11 +108,11 @@ const Profile = () => {
           setUserInfo({ ...userInfo, image: response.data.image });
           toast.success("Image uploaded successfully");
         }
-        const reader = new FileReader();
-        reader.onload = () => {
-          setImage(reader.result);
-        };
-        reader.readAsDataURL(file);
+        // const reader = new FileReader();
+        // reader.onload = () => {
+        //   setImage(reader.result);
+        // };
+        //reader.readAsDataURL(file);
       } catch (error) {
         console.error(error);
         toast.error("Error uploading image");

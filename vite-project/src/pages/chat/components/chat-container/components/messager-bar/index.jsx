@@ -15,6 +15,7 @@ import {
 import { RiRobotFill } from "react-icons/ri";
 import { apiClient } from "@/lib/api-client";
 import { GET_AI_SUGGESTIONS, UPLOAD_FILE_ROUTES } from "@/utils/constants";
+import axios from "axios";
 const MessageBar = () => {
   const fileInputRef = useRef();
   const emojiRef = useRef();
@@ -122,12 +123,14 @@ const MessageBar = () => {
         if (response.status === 200 && response.data) {
           setIsUploading(false);
           if (selectedChatType === "contact") {
+            //console.log("handle attachment change", response.data.fileName);
             socket.emit("sendMessage", {
               sender: userInfo.id,
               content: undefined,
               receiver: selectedChatData.id || selectedChatData._id,
               messageType: "file",
               fileUrl: response.data.filePath,
+              fileName: response.data.fileName,
               isAi: false,
             });
           } else if (selectedChatType === "channel") {
@@ -137,6 +140,7 @@ const MessageBar = () => {
               channelId: selectedChatData.id || selectedChatData._id,
               messageType: "file",
               fileUrl: response.data.filePath,
+              fileName: response.data.fileName,
               isAi: false,
             });
           }

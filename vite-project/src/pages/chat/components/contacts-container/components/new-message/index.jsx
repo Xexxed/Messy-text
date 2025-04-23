@@ -102,7 +102,7 @@ function NewMessage() {
                     <Avatar className="h-12 w-12 rounded-full overflow-hidden flex items-center justify-center">
                       {contact.image ? (
                         <AvatarImage
-                          src={`${HOST}/${contact.image}`}
+                          src={contact.image}
                           alt="Profile"
                           className="object-cover w-full h-full bg-black"
                         />

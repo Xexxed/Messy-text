@@ -23,16 +23,18 @@ const setupSocket = (server) => {
     }
   };
   const sendMessage = async (message) => {
+    console.log("socket sendMessage", message);
     const senderSocketId = userSocketMap.get(message.sender);
-    console.log(message);
+    // console.log(message);
 
     const receiverSocketId = userSocketMap.get(message.receiver);
 
     const createdMessage = await Message.create(message);
+    console.log("createdMessage", createdMessage);
     const messageData = await Message.findById(createdMessage._id)
       .populate("sender", "id email firstName lastName image color")
       .populate("receiver", "id email firstName lastName image color");
-    console.log("messageData", messageData);
+    //console.log("messageData", messageData);
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("receiveMessage", messageData);
     }
@@ -42,12 +44,14 @@ const setupSocket = (server) => {
   };
   const sendChannelMessage = async (message) => {
     const { channelId, sender, content, messageType, fileUrl, isAi } = message;
+    const fileName = message.fileName ? message.fileName : null;
     const createdMessage = await Message.create({
       sender,
       receiver: null,
       content,
       messageType,
       fileUrl,
+      fileName,
       isAi,
       timestamp: new Date(),
     });
