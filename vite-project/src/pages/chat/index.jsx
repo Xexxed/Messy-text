@@ -25,6 +25,20 @@ const Chat = () => {
       navigate("/profile");
     }
   }, [userInfo, navigate]);
+  useEffect(() => {
+    // Set the background color of #root when the component is mounted
+    const rootElement = document.body;
+    if (rootElement) {
+      rootElement.style.backgroundColor = "#1b1c24";
+    }
+
+    // Optional: Reset the background color when the component is unmounted
+    return () => {
+      if (rootElement) {
+        rootElement.style.backgroundColor = ""; // Reset to default
+      }
+    };
+  }, []);
 
   return (
     <div className="flex h-[95vh] text-white outline-hidden">
