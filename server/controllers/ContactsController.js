@@ -104,3 +104,25 @@ export const getContactsForDMList = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+export const getAllContacts = async (req, res) => {
+  try {
+    //console.log("All Contacts req", req.userId);
+    const users = await User.find(
+      { _id: { $ne: req.userId } },
+      "firstName lastName _id email"
+    );
+    //console.log("All Contacts:", users);
+    const contacts = users.map((contact) => ({
+      label: contact.firstName
+        ? `${contact.firstName} ${contact.lastName}`
+        : contact.email,
+      value: contact._id,
+    }));
+    // console.log("All Contacts1231:", contacts);
+    return res.status(200).json({ contacts });
+  } catch (error) {
+    console.error(error);
+    //   return res.status(500).json({ error: error.message });
+  }
+};

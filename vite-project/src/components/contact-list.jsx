@@ -5,6 +5,7 @@ import { getColor } from "@/lib/utils";
 import { useEffect } from "react";
 
 const ContactList = ({ contacts, isChannel = false }) => {
+  console.log(contacts, "contacts in contact list");
   const {
     selectedChatData,
     setSelectedChatData,
@@ -29,6 +30,8 @@ const ContactList = ({ contacts, isChannel = false }) => {
       setSelectedChatMessages([]);
     }
   };
+  console.log(isChannel, "isChannel 42432in contact list");
+
   return (
     <div className="mt-5">
       {contacts.map((contact) => (
