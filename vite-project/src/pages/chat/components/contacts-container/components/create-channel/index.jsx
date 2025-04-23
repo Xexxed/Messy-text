@@ -32,13 +32,8 @@ import MultipleSelector from "@/components/ui/multipleselect";
 
 function CreateChannel() {
   const [newChannelModel, setNewChannelModal] = useState(false);
-  const [searchedContacts, setsearchedContacts] = useState([]);
-  const {
-    selectedChatData,
-    setSelectedChatType,
-    setSelectedChatData,
-    addChannel,
-  } = useAppStore();
+
+  const { addChannel } = useAppStore();
   const [allContacts, setAllContacts] = useState([]);
   const [selectedContacts, setSelectedContacts] = useState([]);
   const [channelName, setChannelName] = useState("");

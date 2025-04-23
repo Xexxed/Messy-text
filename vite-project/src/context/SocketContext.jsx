@@ -39,7 +39,24 @@ export const SocketProvider = ({ children }) => {
           //console.log("selectedChatMessages", { selectedChatMessages });
         }
       };
+      const handleReceiveChannelMessage = (message) => {
+        const { selectedChatData, selectedChatType, addMessage } =
+          useAppStore.getState();
+        //console.log(message);
+        //console.log("selectedChatData", selectedChatData);
+        //console.log(message);
+        if (
+          selectedChatType !== undefined &&
+          (selectedChatData.id || selectedChatData._id) === message.channelId
+        ) {
+          // console.log("message received", message);
+          addMessage(message);
+          //console.log("selectedChatMessages", { selectedChatMessages });
+        }
+      };
+
       socket.current.on("receiveMessage", handleReceiveMessage);
+      socket.current.on("receive-channel-message", handleReceiveChannelMessage);
       return () => {
         socket.current.disconnect();
         console.log("Disconnected from socket server");

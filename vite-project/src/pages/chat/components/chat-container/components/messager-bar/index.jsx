@@ -66,7 +66,17 @@ const MessageBar = () => {
         fileUrl: undefined,
         isAi: ai,
       });
+    } else if (selectedChatType === "channel") {
+      socket.emit("send-channel-message", {
+        sender: userInfo.id,
+        content: message,
+        channelId: selectedChatData.id || selectedChatData._id,
+        messageType: "text",
+        fileUrl: undefined,
+        isAi: ai,
+      });
     }
+    //setMessage("");
   };
   const fetchAISuggestions = async () => {
     try {
@@ -116,6 +126,15 @@ const MessageBar = () => {
               sender: userInfo.id,
               content: undefined,
               receiver: selectedChatData.id || selectedChatData._id,
+              messageType: "file",
+              fileUrl: response.data.filePath,
+              isAi: false,
+            });
+          } else if (selectedChatType === "channel") {
+            socket.emit("send-channel-message", {
+              sender: userInfo.id,
+              content: undefined,
+              channelId: selectedChatData.id || selectedChatData._id,
               messageType: "file",
               fileUrl: response.data.filePath,
               isAi: false,

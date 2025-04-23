@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-
+import User from "./UserModel.js";
+import Message from "./MessagesModel.js";
 const channelSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -12,13 +13,13 @@ const channelSchema = new mongoose.Schema({
   members: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
+      ref: "User",
       required: true,
     },
   ],
   admin: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
+    ref: "User",
     required: true,
   },
   messages: [

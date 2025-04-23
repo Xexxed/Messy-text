@@ -30,7 +30,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
       setSelectedChatMessages([]);
     }
   };
-  console.log(isChannel, "isChannel 42432in contact list");
+  //console.log(isChannel, "isChannel 42432in contact list");
 
   return (
     <div className="mt-5">
