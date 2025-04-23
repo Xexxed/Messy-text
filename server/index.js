@@ -28,7 +28,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactsRoutes);
 app.use("/api/messages", messagesRoutes);
 app.use("/api/channels", channelRoutes);
-
+app.get("/", (req, res) => {
+  res.status(200).send("Server is running!");
+});
 const server = app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
